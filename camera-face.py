@@ -33,12 +33,11 @@ window_height, window_width = [float(z) for z in frame.shape[0:2]]
 cv2.setMouseCallback('OpenCV face recognition', quit)
 
 # initialise kalman filter to smooth the tracking trajectory
-m = [window_width/2. - 150., window_height/2. - 150., 300., 300.] # state estimate currently in the middle of the image
+window_width
 
-# the state uncertainty is now choosen independently from the V and W.
-# What would be a reasonable guess? The face can initialy be anywhere, so what is the uncertainty?
-P = [1, 1, 1, 1] # state uncertainty
-# P = [V[i] + W[i] for i in range(4)] # state uncertainty
+# state estimate is in the center of the image of a size of the half of the image
+m = [window_width/4., window_height/4., 3*window_width/4., 3*window_height/4.,] 
+P = [item for item in [window_width/2, window_height/2]*2 ] # state uncertainty
 
 # main loop
 while(RUN):
