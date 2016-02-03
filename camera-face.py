@@ -36,9 +36,14 @@ while(True):
   # get an image
   ret, frame = cap.read()
 
+#  # transform to small and grayscale
+#  gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+#  gray = cv2.resize(gray, (0, 0), fx=0.5, fy=0.5)
+  
 
   # look for faces
-  faces = face_recog.detectMultiScale(frame, 1.3, 5)
+  faces = face_recog.detectMultiScale(frame, scaleFactor=1.3, minNeighbors=5, minSize=(100, 100))
+
   if len(faces) > 0:
 
     obs = [float(z) for z in faces[0]]
