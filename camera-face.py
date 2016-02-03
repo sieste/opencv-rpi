@@ -1,16 +1,24 @@
 #!/usr/bin/env python2
 
+##################################################
+# flags to set up the properties of the script
+# this can be later accepted using comand line arguments
+filter = True
+
+
+# import required functions
 import cv2
-from filter import kalman
+if filter:
+  from filter import kalman
 
 ############################################################
 # define the functions
 # quitting: click into window to stop program
-QUIT = False
+RUN = True
 def quit(event, x, y, flags, param):
-  global QUIT
+  global RUN
   if event == cv2.EVENT_LBUTTONDOWN:
-    QUIT = True
+    RUN = False
 
 ############################################################
 # initialise window, video capture, and face recognition
@@ -33,41 +41,30 @@ P = [1, 1, 1, 1] # state uncertainty
 # P = [V[i] + W[i] for i in range(4)] # state uncertainty
 
 # main loop
-while(True):
-
+while(RUN):
   # get an image
   ret, frame = cap.read()
 
 #  # transform to small and grayscale
 #  gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 #  gray = cv2.resize(gray, (0, 0), fx=0.5, fy=0.5)
-  
 
   # look for faces
   faces = face_recog.detectMultiScale(frame, scaleFactor=1.3, minNeighbors=5, minSize=(100, 100))
 
   if len(faces):
-    kalman([float(z) for z in faces[0]], P, m)
     colr = (255, 0, 0)
+    obs = [float(z) for z in faces[0]]
+    if filter:
+      xx, yy, ww, hh = kalman(obs, P, m)
+    else:
+      xx, yy, ww, hh = [int(f) for f in obs]      # use raw coordinates
   else:
     colr = (0, 0, 255)
 
-
-#  # use raw coordinates
-#  xx, yy, ww, hh = [int(f) for f in obs]
-  # use filtered coordinates
-  xx, yy, ww, hh = [int(f) for f in m]
-  # draw rectangle
-  cv2.rectangle(frame,(xx, yy),(xx+ww, yy+hh),colr,2)
-
-
-  # draw image
-  cv2.imshow('OpenCV face recognition', cv2.flip(frame, 1))
-
-
-  if QUIT == True:
-    break
-
+  # draw the results
+  cv2.rectangle(frame,(xx, yy),(xx+ww, yy+hh),colr,2)  # rectangle
+  cv2.imshow('OpenCV face recognition', cv2.flip(frame, 1))  # image
 
 # clean up
 cap.release()

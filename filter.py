@@ -2,15 +2,14 @@
 
 def kalman(observation, uncertainty, model, proc_var = [10., 10., 1., 1.], obs_var = [100., 100., 100., 100.]):
     """
-    Uses the Kalman filter to infere the 'model' states from the
-    'observation'.  The parameters 'proc_var' and 'obs_var' determine
+    Uses the Kalman filter to infere the 'model' states which are returned. The filter uses
+    'observation' input.  The parameters 'proc_var' and 'obs_var' determine
     the speed of the filter adaptations.
 
     model -- state estimate 
     uncertainty -- state uncertainty
     proc_var -- process variance (left/right variance is larger than depth variance by default)
     obs_var -- observational variance
-
     """
     for i in range(4):
         # kalman gain
@@ -18,3 +17,4 @@ def kalman(observation, uncertainty, model, proc_var = [10., 10., 1., 1.], obs_v
         model[i]       = model[i] + K * (observation[i] - model[i])      # updated state estimate
         uncertainty[i] = (1 - K) * (uncertainty[i] + proc_var[i])        # updated state uncertainty
 
+    return [int(f) for f in model]
