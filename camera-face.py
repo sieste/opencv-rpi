@@ -32,12 +32,10 @@ window_height, window_width = [float(z) for z in frame.shape[0:2]]
 
 cv2.setMouseCallback('OpenCV face recognition', quit)
 
-# initialise kalman filter to smooth the tracking trajectory
-window_width
-
-# state estimate is in the center of the image of a size of the half of the image
-m = [window_width/4., window_height/4., 3*window_width/4., 3*window_height/4.,] 
-P = [item for item in [window_width/2, window_height/2]*2 ] # state uncertainty
+if filter:
+  # state estimate is in the center of the image of a size of the half of the image
+  m = [window_width/4., window_height/4., 3*window_width/4., 3*window_height/4.,] 
+  P = [item for item in [window_width/2, window_height/2]*2 ] # state uncertainty
 
 # main loop
 while(RUN):
