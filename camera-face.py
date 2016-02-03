@@ -54,11 +54,10 @@ while(RUN):
 
   if len(faces):
     colr = (255, 0, 0)
-    obs = [float(z) for z in faces[0]]
     if filter:
-      xx, yy, ww, hh = kalman(obs, P, m)
+      xx, yy, ww, hh = kalman([float(z) for z in faces[0]], P, m)      # filter coordinates
     else:
-      xx, yy, ww, hh = [int(f) for f in obs]      # use raw coordinates
+      xx, yy, ww, hh = faces[0]      # raw coordinates
   else:
     colr = (0, 0, 255)
 
