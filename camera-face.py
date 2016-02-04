@@ -5,7 +5,6 @@
 # this can be later accepted using comand line arguments
 filter = True
 
-
 # import required functions
 import cv2
 if filter:
@@ -21,16 +20,22 @@ def quit(event, x, y, flags, param):
     RUN = False
 
 ############################################################
-# initialise window, video capture, and face recognition
-cv2.namedWindow('OpenCV face recognition')
-cv2.moveWindow('OpenCV face recognition', 10, 10)
+# initialise window
+wname = 'OpenCV face recognition'
+cv2.namedWindow(wname)
+cv2.moveWindow(wname, 10, 10)
 cv2.startWindowThread()
+cv2.setMouseCallback(wname, quit)
+
+# intialise video capture
 cap = cv2.VideoCapture(0)
+# initialise object (face) recognition
 face_recog = cv2.CascadeClassifier('/usr/share/opencv/haarcascades/haarcascade_frontalface_alt2.xml')
 ret, frame = cap.read()
 window_height, window_width = [float(z) for z in frame.shape[0:2]]
 
-cv2.setMouseCallback('OpenCV face recognition', quit)
+# initialize coordinates of a square
+xx, yy, hh, ww = [0, 0, 0, 0]
 
 if filter:
   # state estimate is in the center of the image of a size of the half of the image
@@ -60,7 +65,7 @@ while(RUN):
 
   # draw the results
   cv2.rectangle(frame,(xx, yy),(xx+ww, yy+hh),colr,2)  # rectangle
-  cv2.imshow('OpenCV face recognition', cv2.flip(frame, 1))  # image
+  cv2.imshow(wname, cv2.flip(frame, 1))  # image
 
 # clean up
 cap.release()
