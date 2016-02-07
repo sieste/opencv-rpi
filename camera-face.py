@@ -24,7 +24,6 @@ def quit(event, x, y, flags, param):
 wname = 'OpenCV face recognition'
 cv2.namedWindow(wname)
 cv2.moveWindow(wname, 10, 10)
-cv2.startWindowThread()
 cv2.setMouseCallback(wname, quit)
 
 # intialise video capture
@@ -66,6 +65,11 @@ while(RUN):
   # draw the results
   cv2.rectangle(frame,(xx, yy),(xx+ww, yy+hh),colr,2)  # rectangle
   cv2.imshow(wname, cv2.flip(frame, 1))  # image
+  # waitKey allows the drawing into the window
+  # key 'q' breaks the loop
+  if cv2.waitKey(1) & 0xFF == ord('q'):
+    break
+
 
 # clean up
 cap.release()
